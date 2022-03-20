@@ -1,16 +1,10 @@
 const express = require('express');
-const fs = require('fs').promises;
+const { getAll } = require('../services/talkerService');
 
 const router = express.Router();
 
-router.get('/talker', (req, res) => {
-  fs.readFile('talker.json', 'utf-8')
-    .then((data) => {
-      res.status(200).send(JSON.parse(data));
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+router.get('/talker', async (req, res) => {
+  res.status(200).send(await getAll());
 });
 
 // router.get();
