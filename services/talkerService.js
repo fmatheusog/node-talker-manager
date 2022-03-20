@@ -5,6 +5,13 @@ const getAll = async () => {
   return JSON.parse(data);
 };
 
+const getTalkerById = async (id) => {
+  const data = await fs.readFile('talker.json', 'utf-8');
+  const res = JSON.parse(data);
+  return res.find((talker) => talker.id === Number(id));
+};
+
 module.exports = {
   getAll,
+  getTalkerById,
 };
