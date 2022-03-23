@@ -1,5 +1,11 @@
 const express = require('express');
 const { getAll, getTalkerById } = require('../services/talkerService');
+const { 
+  validateToken,
+  validateName,
+  validateAge,
+  validateWatchedAt,
+  validateRate } = require('../middlewares/talkerValidation');
 
 const router = express.Router();
 
@@ -19,7 +25,12 @@ router.get('/talker/:id', async (req, res) => {
 
   res.status(200).send(data);
 });
-// router.post();
+
+router.post('/talker', validateToken, validateName, (req, res) => {
+    res.status(200).send({
+      teste: 'ok',
+    });
+});
 // router.put();
 // router.delete();
 // router.get();
