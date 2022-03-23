@@ -1,9 +1,10 @@
 const express = require('express');
-const { getAll, getTalkerById } = require('../services/talkerService');
+const { getAll, getTalkerById, addTalker } = require('../services/talkerService');
 const { 
   validateToken,
   validateName,
   validateAge,
+  validateTalk,
   validateWatchedAt,
   validateRate } = require('../middlewares/talkerValidation');
 
@@ -26,10 +27,18 @@ router.get('/talker/:id', async (req, res) => {
   res.status(200).send(data);
 });
 
-router.post('/talker', validateToken, validateName, (req, res) => {
-    res.status(200).send({
-      teste: 'ok',
-    });
+router.post('/talker',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  async (req, res) => {
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const talker = await addTalker(name, age, watchedAt, rate);
+    
+    res.status(201).send(talker);
 });
 // router.put();
 // router.delete();

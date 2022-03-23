@@ -9,7 +9,7 @@ const validateToken = (req, res, next) => {
     });
   }
 
-  if (authorization !== 16) {
+  if (authorization.length !== 16) {
     return res.status(401).send({
       message: 'Token inválido',
     });
@@ -20,7 +20,6 @@ const validateToken = (req, res, next) => {
 
 const validateName = (req, res, next) => {
   const { name } = req.body;
-  console.log(name);
   
   if (!name) {
     return res.status(400).send({
@@ -41,14 +40,26 @@ const validateAge = (req, res, next) => {
   const { age } = req.body;
 
   if (!age) {
-    res.status(400).send({
+    return res.status(400).send({
       message: 'O campo "age" é obrigatório',
     });
   }
 
-  if (age.length < 18) {
-    res.status(400).send({
+  if (age < 18) {
+    return res.status(400).send({
       message: 'A pessoa palestrante deve ser maior de idade',
+    });
+  }
+
+  next();
+};
+
+const validateTalk = (req, res, next) => {
+  const { talk } = req.body;
+
+  if (!talk) {
+    return res.status(400).send({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
 
@@ -59,13 +70,13 @@ const validateWatchedAt = (req, res, next) => {
   const { talk: { watchedAt } } = req.body;
 
   if (!watchedAt) {
-    res.status(400).send({
+    return res.status(400).send({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
 
   if (checkDateFormat(watchedAt) === false) {
-    res.status(400).send({
+    return res.status(400).send({
       message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
     });
   }
@@ -77,8 +88,14 @@ const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
   
   if (!rate) {
-    res.status(400).send({
+    return res.status(400).send({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
+  }
+
+  if (rate < 1 || rate > 5) {
+    return res.status(400).send({
+      message: 'O campo "rate" deve ser um inteiro de 1 à 5',
     });
   }
 
@@ -89,6 +106,7 @@ module.exports = {
   validateToken,
   validateName,
   validateAge,
+  validateTalk,
   validateWatchedAt,
   validateRate,
 };
