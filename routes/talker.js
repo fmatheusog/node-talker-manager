@@ -1,5 +1,10 @@
 const express = require('express');
-const { getAll, getTalkerById, addTalker, updateTalker } = require('../services/talkerService');
+const { 
+  getAll,
+  getTalkerById,
+  addTalker,
+  updateTalker,
+  deleteTalker } = require('../services/talkerService');
 const { 
   validateToken,
   validateName,
@@ -56,7 +61,13 @@ router.put('/talker/:id',
     res.status(200).send(talker);
   });
   
-// router.delete();
+  router.delete('/talker/:id', validateToken, async (req, res) => {
+    const { id } = req.params;
+    await deleteTalker(id);
+    
+    res.status(204).send();
+  });
+
 // router.get();
 
 module.exports = router;
