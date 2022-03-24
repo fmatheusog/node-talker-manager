@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAll, getTalkerById, addTalker } = require('../services/talkerService');
+const { getAll, getTalkerById, addTalker, updateTalker } = require('../services/talkerService');
 const { 
   validateToken,
   validateName,
@@ -40,7 +40,22 @@ router.post('/talker',
     
     res.status(201).send(talker);
 });
-// router.put();
+
+router.put('/talker/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  async (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+    const talker = await updateTalker({ id, name, age, talk });
+
+    res.status(200).send(talker);
+  });
+  
 // router.delete();
 // router.get();
 
