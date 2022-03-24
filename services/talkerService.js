@@ -13,6 +13,13 @@ const getTalkerById = async (id) => {
   return data.find((talker) => talker.id === Number(id));
 };
 
+const searchTalker = async (name) => {
+  const file = await fs.readFile(fileName, 'utf-8');
+  const data = JSON.parse(file);
+
+  return data.filter((talker) => talker.name.toLowerCase().includes(name.toLowerCase()));
+};
+
 const addTalker = async (name, age, watchedAt, rate) => {
   const file = await fs.readFile(fileName, 'utf-8');
   const data = JSON.parse(file);
@@ -49,6 +56,7 @@ const deleteTalker = async (id) => {
 module.exports = {
   getAll,
   getTalkerById,
+  searchTalker,
   addTalker,
   updateTalker,
   deleteTalker,

@@ -2,6 +2,7 @@ const express = require('express');
 const { 
   getAll,
   getTalkerById,
+  searchTalker,
   addTalker,
   updateTalker,
   deleteTalker } = require('../services/talkerService');
@@ -17,6 +18,13 @@ const router = express.Router();
 
 router.get('/talker', async (req, res) => {
   res.status(200).send(await getAll());
+});
+
+router.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const result = await searchTalker(q);
+
+  res.status(200).send(result);
 });
 
 router.get('/talker/:id', async (req, res) => {
@@ -65,7 +73,7 @@ router.put('/talker/:id',
     const { id } = req.params;
     await deleteTalker(id);
     
-    res.status(204).send();
+    res.sendStatus(204);
   });
 
 // router.get();
